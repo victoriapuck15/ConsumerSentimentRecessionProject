@@ -10,9 +10,6 @@ library(httr)
 library(lubridate)
 
 
-####################################
-# Start
-
 url <- "https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/coincident/coincident-revised.xls"
 download.file(url = url, mode = "wb", destfile = "statecoincidentdata.xls")
 
