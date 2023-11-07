@@ -56,7 +56,7 @@ YearEnd = 2018;
 YearStart = 2000;
 
 % Load data
-DataPath = '/Users/michaellicata/Documents/MATLAB/HMCI_estimation 2/data/data.xlsx';
+DataPath = '/Users/michaellicata/Documents/MATLAB/HMCI_estimation 2/data/final_dataset.xlsx';
 [a,b] = xlsread(DataPath);
 T = readtable(DataPath);
 
@@ -213,7 +213,8 @@ writetable(outputTable, 'hmci.xlsx', 'Sheet', 'hmci', 'Range', 'A1');
 
 
 %% Load CCI (OECD)
-DataPath2 = '/Users/michaellicata/Documents/MATLAB/HMCI_estimation 2/data/cci.xlsx';  
+DataPath2 = '/Users/michaellicata/Documents/MATLAB/HMCI_estimation 2/data/cci.xlsx';
+cciTable = readtable(DataPath2);
 [cci,b] = xlsread(DataPath2);
 cciList = b(1,2:end);
 
@@ -248,4 +249,57 @@ for j = 1:length(Countries)
     end
     title(string(Countries(j)))
 end
-legend('HMCI (growth)','CCI (OECD)')
+legend('HMCI (growth)','CCI (OECD)');
+
+
+
+% Assuming table1 and table2 are your two data tables, and they have the same structure
+
+% First, synchronize the tables by the date column, assuming the date column is named 'Date'
+% The synchronized tables will only have rows with dates that appear in both tables
+outputTable(:,"NO") = [];
+table_sync = innerjoin(cciTable, outputTable, 'Keys', 'Dates');
+
+
+% Initialize a variable to store the correlation coefficients
+countries = table_sync.Properties.VariableNames(2:end); % Skip the date column
+countriesNames = cciTable.Properties.VariableNames(2:end);
+correlations = array2table(zeros(length(countriesNames), 1), 'VariableNames', {'Correlation'}, 'RowNames', countriesNames);
+
+% Calculate the correlation for each country
+for i = 1:21
+    % Extract the data for the current country from both tables
+    
+    countryData1 = table_sync(:,countries{i});
+    countryData2 = table_sync(:,countries{i+21});
+    
+    
+    countryData1 = table2array(countryData1);
+    countryData2 = table2array(countryData2);
+
+    % Check if the data contains NaN values and handle them
+    % Here we're removing pairs where either table has a NaN for a given date
+    validIdx = ~isnan(countryData1) & ~isnan(countryData2);
+    countryData1 = countryData1(validIdx);
+    countryData2 = countryData2(validIdx);
+    
+    % Calculate the correlation coefficient for the current country
+    correlation = corr(countryData1, countryData2);
+
+    % Store the result in the correlations table
+    correlations{countriesNames{i}, 'Correlation'} = correlation;
+end
+
+
+% Assuming your table is named 'correlationTable'
+% Convert row names to a regular column in the table
+correlations.CountryNames = correlations.Properties.RowNames;
+
+% Now, make 'CountryNames' the first column
+correlations = correlations(:, ['CountryNames', correlations.Properties.VariableNames(1:end-1)]);
+
+% Specify the path to the Excel file you want to create
+filename = 'corr.xlsx';
+
+% Write the table to an Excel file
+writetable(correlations, filename, 'WriteRowNames', false);
