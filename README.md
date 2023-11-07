@@ -28,4 +28,8 @@ Data Sources:
 - OECD (2023), Share prices (indicator). doi: 10.1787/6ad82f42-en (Accessed on 03 November 2023)
 - Bank for International Settlements. "Nominal effective exchange rates, Broad (64 economies) indices" BIS Statistics Warehouse, 2023, [stats.bis.org/statx/srs/table/i1?m=B.](https://stats.bis.org/statx/srs/table/i1?m=B)https://stats.bis.org/statx/srs/table/i1?m=B
 - OECD (2023), Terms of trade (indicator). doi: 10.1787/7722246c-en (Accessed on 03 November 2023)
-  
+- Norway mortgage/loan Rates:https://www.ssb.no/en/statbank/table/10729/tableViewLayout1/ 
+- Poland mortgage/loan Rates: https://nbp.pl/en/statistic-and-financial-reporting/monetary-and-financial-statistics/mir-statistics/
+- Austria mortgage/loan Rates: https://www.oenb.at/en/Statistics/Standardized-Tables/interest-rates-and-exchange-rates/Interest-Rates-of-Credit-Institutions.html 
+- Sweden mortgage/loan Rates: https://www.riksbank.se/en-gb/statistics/search-interest--exchange-rates/policy-rate-deposit-and-lending-rate/ 
+- Hungary mortgage/loan rates: https://statisztika.mnb.hu/idosor-2216 
