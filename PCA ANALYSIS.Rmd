@@ -1,0 +1,55 @@
+---
+title: "PCA Analysis"
+author: "Victoria Puck-Karam and Michael Licata"
+date: "2023-11-16"
+output: html_document
+---
+```{r}
+library(tidyverse)
+library(mdsr)
+library(mvtnorm)
+library(factoextra)
+library(mice)
+```
+
+```{r}
+data <- read.csv('/Users/victoriapuck-karam/Desktop/final.csv')
+data <- data[-(1:5),(3:13)]
+your_data <- as.data.frame(lapply(data, as.numeric))
+numeric_data <- scale(your_data)
+head(numeric_data)
+```
+
+```{r}
+imputed_data <- mice(numeric_data, method = "pmm", m = 5)  # Adjust 'm' as needed
+imputed_data
+```
+
+
+
+```{r}
+pca_result <- prcomp(complete(imputed_data), center = TRUE, scale. = TRUE)
+summary(pca_result)
+```
+
+```{r}
+pve <- get_eig(pca_result)
+pve
+```
+
+
+```{r}
+plot(pca_result, type = "l", main = "Scree Plot")
+```
+```{r}
+pca_result %>%
+  fviz_pca_var(axes = c(1,2), # PCs to consider
+             col.var = "contrib", # Color by contributions to the PC
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE # Avoid text overlapping
+             )    
+
+```
+```
+
+
